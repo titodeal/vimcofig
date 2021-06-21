@@ -49,6 +49,15 @@ nmap <C-B><C-K> :NERDTreeToggle<cr>
 let NERDTreeHijackNetrw=1 " replace the standart edit mode (e .).
 let NERDTreeIgnore=["__pycache__$[[dir]]"]
 
+"---Ag---"
+"" serach and replace by Ag"
+command! -nargs=* Agreplace call Agreplace(<f-args>) 
+fun Agreplace(patt, str, ...)
+"Agreplace patt str path/files"
+    let path = a:0 >= 1 ? a:1 : "./"
+    execute 'Ag! ' .a:patt . ' ' . path
+    execute 'cdo %s/'. a:patt .'/'. a:str .'/gc | update'
+endfun
 
 "--------------- Split Managment -------------"
 set splitbelow  " creates a new split below. 
@@ -70,15 +79,6 @@ nmap <F2> yiw:.,$s/<C-R>"//gc\|1,.-&&<Left><Left><Left><Left><Left><Left><Left><
 vmap <C-F> y/<C-R>"<cr>						
 nmap <C-F> viwy/<C-R>"<cr>
 
-""---Ag---"
-" serach and replace by Ag"
-command! -nargs=* Agreplace call Agreplace(<f-args>) 
-fun Agreplace(patt, str, ...) 
-"Agreplace patt str path/files"
-    let path = a:0 >= 1 ? a:1 : "./"
-       execute 'Ag! ' .a:patt . ' ' . path
-        execute 'cdo %s/'. a:patt .'/'. a:str .'/gc | update'
-endfun	
 
 "--------------- Mappings -------------"
 "Make it easy to edit the Vimrc file.

@@ -22,10 +22,12 @@ Plugin 'preservim/nerdtree'
 "Colorsheme plugin"
 Plugin 'morhetz/gruvbox'
 
-
 " The UltSnips plugin which allow setup and use snips for different languge
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+
+" The Ag plugin for searching and replacing"
+Plugin 'rking/ag.vim'
 
 
 
