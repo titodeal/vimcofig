@@ -14,16 +14,27 @@ set background=dark
 
 ""set guifont=Fira_Code:h17
 "" Turn off pannel slide"
-"set guioptions=-l
-"set guioptions=-L
-"set guioptions=-r
-"set guioptions=-R
+" set guioptions=-l
+" set guioptions=-L
+" set guioptions=-r
+" set guioptions=-R
+  
 
+"------------- Options ---------------"
 
-
-
-
-
+set number
+set mouse=n
+set tabstop=4
+set expandtab
+"--- statusline"
+set laststatus=2
+set statusline=
+set statusline+=%-5m               "Modified flag"
+set statusline+=%F                 "Full path"
+set statusline+=%=                 "Left/Right separator"
+set statusline+=%l/%-5L:           "Lines"
+set statusline+=%-5c:              "Column"
+set statusline+=%y                 "Type file"
 
 
 " -------------- Plugins -------------- "
@@ -88,12 +99,13 @@ imap ' <Esc>:call DoubleChar("'")<CR>
 imap [ <Esc>:call DoubleChar("[", "]")<CR>
 imap ] <Esc>:call DoubleChar("[", "]")<CR>
 imap { <Esc>:call DoubleChar("{", "}")<CR>
-imap } <Esc>:call DoubleChar("{", "}")<CR> 
+imap } <Esc>:call DoubleChar("{", "}")<CR>
 imap ( <Esc>:call DoubleChar("(", ")")<CR>
-imap ) <Esc>:call DoubleChar("(", ")")<CR> 
+imap ) <Esc>:call DoubleChar("(", ")")<CR>
 imap < <Esc>:call DoubleChar("<", ">")<CR>
-imap > <Esc>:call DoubleChar("<", ">")<CR> 
+imap > <Esc>:call DoubleChar("<", ">")<CR>
 
+   
 fun DoubleChar(char, ...)
 	if a:0 > 0
 		let ch1 = a:char
@@ -115,7 +127,7 @@ fun InsertTo(line, insert_line, pos)
 	let p1 = strpart(a:line, 0, a:pos)
 	let p2 = strpart(a:line, a:pos)
 	call setline(".", p1 . a:insert_line . p2)
-	exe "normal ll"
+	exe "norm! ll"
 	exe "startinsert"
 endfunction
 " ---"
@@ -125,7 +137,7 @@ nmap <leader>c :q<cr>
 nmap !<leader>c :q!<cr> 
 
 "save"
-nmap <C-j> :w<cr>
+nmap <C-s> :w<cr>
 
 "force write"
 nmap <leader><C-s> :w!<cr>
@@ -140,6 +152,14 @@ nnoremap g<Tab> :exe "tabn".g:lasttab<cr>
 nmap <leader>0 g_
 
 " exec current file
-""nmap <leader> <C-B>  :!'%:p'<CR> 
-nmap <leader><C-B> :!$VIRTUAL_ENV/bin/python '%:p'<CR> 
+nmap <leader><C-B>  :!python3 '%:p'<CR>
+""nmap <leader><C-B> :!$VIRTUAL_ENV/bin/python '%:p'<CR> 
 ""
+
+"-------------Auto-Commands-----------"
+"Automatically source the Vimrc file on save.
+ ""augroup aoutosourcing
+ ""	autocmd! 
+ ""	autocmd BufWritePost vimrc source %
+ ""augroup END
+
