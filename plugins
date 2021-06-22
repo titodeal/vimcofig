@@ -10,11 +10,11 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
+" Syntax Checking
+Plugin 'neomake/neomake'
+
 " The YouCompleteMe plugin which get autocomplete
 Plugin 'ycm-core/YouCompleteMe'
-
-" Supertab plugin
-" Plugin 'ervandew/supertab'
 
 " The NERDTree Plugin
 Plugin 'preservim/nerdtree'

@@ -26,6 +26,7 @@ set number
 set mouse=n
 set tabstop=4
 set expandtab
+set shiftwidth=4
 "--- statusline"
 set laststatus=2
 set statusline=
@@ -38,6 +39,18 @@ set statusline+=%y                 "Type file"
 
 
 " -------------- Plugins -------------- "
+
+" --- Neomake"
+autocmd! BufReadPost,BufWritePost,BufEnter * Neomake
+let g:neomake_python_enabled_makers = ['flake8', 'mypy']
+let g:neomake_error_sign = {
+ \ 'text': 'E>',
+ \ 'texthl': 'NeomakeErrorSign',
+ \ }
+let g:neomake_warning_sign = {
+ \   'text': 'W>',
+ \   'texthl': 'NeomakeWarningSign',
+ \ }
 
 " --- UltiSnips --- "
 let g:UltiSnipsEditSplit="tabdo" " Open an snipfile in saparate tab.
@@ -88,20 +101,24 @@ nmap <leader>ev :tabedit $MYVIMRC<cr>
 map <C-_> :s/^/# <cr>
 " turn-off selected text as comment block"
 map <leader><c-_> :s/# //<cr>
+
 " surrond selection to quotes"
-vmap " m>o<ESC>i"<ESC>x`>la"<ESC>x
-vmap ' m>o<ESC>i'<ESC>x`>la'<ESC>x
+vnoremap " m>o<ESC>i"<ESC>`>la"<ESC>
+vnoremap ' m>o<ESC>i'<ESC>`>la'<ESC>
+vnoremap ( m>o<ESC>i(<ESC>`>la)<ESC>
+vnoremap [ m>o<ESC>i[<ESC>`>la]<ESC>
+vnoremap { m>o<ESC>i{<ESC>`>la}<ESC>
+vnoremap < m>o<ESC>i<<ESC>`>la><ESC>
 
-" --- Double characters ---"
-
+" --- Doublecharacters---"
 imap " <Esc>:call DoubleChar('"')<CR>
 imap ' <Esc>:call DoubleChar("'")<CR>
+imap ( <Esc>:call DoubleChar("(", ")")<CR>
+imap ) <Esc>:call DoubleChar("(", ")")<CR>
 imap [ <Esc>:call DoubleChar("[", "]")<CR>
 imap ] <Esc>:call DoubleChar("[", "]")<CR>
 imap { <Esc>:call DoubleChar("{", "}")<CR>
 imap } <Esc>:call DoubleChar("{", "}")<CR>
-imap ( <Esc>:call DoubleChar("(", ")")<CR>
-imap ) <Esc>:call DoubleChar("(", ")")<CR>
 imap < <Esc>:call DoubleChar("<", ">")<CR>
 imap > <Esc>:call DoubleChar("<", ">")<CR>
 
@@ -116,12 +133,18 @@ fun DoubleChar(char, ...)
 	endif
 
 	let char = strpart(getline("."), col("."), 1)
+    let next_char = strpart(getline("."), col(".") + 1, 1)
 	if char == ch2
-		call InsertTo(getline("."), ' ', col(".") + 1)   
+        if char2nr(next_char) == 0
+            call InsertTo(getline("."), ' ' , col(".") + 1)   
+        else
+            call InsertTo(getline("."), "", col(".") + 1)   
+        endif 
 	else
 		call InsertTo(getline("."), ch1 . ch2, col("."))   
 	endif
 endfunction
+
 
 fun InsertTo(line, insert_line, pos)
 	let p1 = strpart(a:line, 0, a:pos)
@@ -154,7 +177,29 @@ nmap <leader>0 g_
 " exec current file
 nmap <leader><C-B>  :!python3 '%:p'<CR>
 ""nmap <leader><C-B> :!$VIRTUAL_ENV/bin/python '%:p'<CR> 
+
 ""
+" -Location list navigation"
+function LocationPrevious()
+    try
+        lprev
+    catch /^Vim\%((\a\+)\)\=:E553/
+        llast
+    endtry
+endfunction    
+function LocationNext()
+    try
+        lnext
+    catch /^Vim\%((\a\+)\)\=:E553/
+        lfirst
+    endtry
+endfunction    
+
+nmap <C-n> :call LocationNext()<CR>
+nmap <S-n> :call LocationPrevious()<CR>
+"nmap <C-n> :ll<CR> 
+
+
 
 "-------------Auto-Commands-----------"
 "Automatically source the Vimrc file on save.
