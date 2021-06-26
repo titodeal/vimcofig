@@ -27,7 +27,8 @@ set mouse=n
 set tabstop=4
 set expandtab
 set shiftwidth=4
-"--- statusline"
+
+"-statusline"
 set laststatus=2
 set statusline=
 set statusline+=%-5m               "Modified flag"
@@ -41,16 +42,27 @@ set statusline+=%y                 "Type file"
 " -------------- Plugins -------------- "
 
 " --- Neomake"
-autocmd! BufReadPost,BufWritePost,BufEnter * Neomake
+call neomake#configure#automake({
+\ 'TextChanged': {},
+\ 'InsertLeave': {},
+\ 'BufWritePost': {'delay': 0}, 
+\ 'BufWinEnter': {'delay': 0}, 
+\ }, 100)
+
+let g:neomake_python_flake8_maker = {
+\ 'exe': 'flake8',
+\ 'args': ['--max-complexity', '3'],
+\ }
+
 let g:neomake_python_enabled_makers = ['flake8', 'mypy']
 let g:neomake_error_sign = {
- \ 'text': 'E>',
- \ 'texthl': 'NeomakeErrorSign',
- \ }
+\ 'text': 'E>',
+\ 'texthl': 'NeomakeErrorSign',
+\ }
 let g:neomake_warning_sign = {
- \   'text': 'W>',
- \   'texthl': 'NeomakeWarningSign',
- \ }
+\   'text': 'W>',
+\   'texthl': 'NeomakeWarningSign',
+\ }
 
 " --- UltiSnips --- "
 let g:UltiSnipsEditSplit="tabdo" " Open an snipfile in saparate tab.
@@ -108,7 +120,6 @@ vnoremap ' m>o<ESC>i'<ESC>`>la'<ESC>
 vnoremap ( m>o<ESC>i(<ESC>`>la)<ESC>
 vnoremap [ m>o<ESC>i[<ESC>`>la]<ESC>
 vnoremap { m>o<ESC>i{<ESC>`>la}<ESC>
-vnoremap < m>o<ESC>i<<ESC>`>la><ESC>
 
 " --- Doublecharacters---"
 imap " <Esc>:call DoubleChar('"')<CR>
